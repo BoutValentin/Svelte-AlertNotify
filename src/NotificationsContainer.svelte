@@ -68,8 +68,7 @@
 
 .div-notification-container{
      min-width: min(50px, max(3vw,25px));
-     max-width: min(50%,450px);
-     width: auto;
+     width: min(50%,325px);
      position: fixed;
      transition: cubic-bezier(.14,.96,.83,.67);
      transition-duration: 500ms;
@@ -82,11 +81,11 @@
 <div class="div-notification-container" style={styledPositionString}>
      {#if positioning==="bottom" || positioning==="bottomRight" ||positioning==="bottomLeft" }
      {#each array as notification (notification.id) }
-          <Notification message={notification.message} type={notification.type} onBotton={true} timeout={notification.timeout} crossClose={notification.crossClose ? notification.crossClose : undefined} srcImage={notification.srcImage} altImage={notification.altImage} key={notification.id}/>
+          <Notification showIconSvg={notification.showIconSvg} message={notification.message} type={notification.type} onBotton={true} timeout={notification.timeout} crossClose={notification.crossClose ? notification.crossClose : undefined} srcImage={notification.srcImage} altImage={notification.altImage} key={notification.id}/>
      {/each}
      {:else}
      {#each [...array].reverse() as notification (notification.id) }
-          <Notification message={notification.message} type={notification.type} onBotton={false} timeout={notification.timeout} crossClose={notification.crossClose ? notification.crossClose : undefined} srcImage={notification.srcImage} altImage={notification.altImage} key={notification.id}/>
+          <Notification showIconSvg={notification.showIconSvg} message={notification.message} type={notification.type} onBotton={false} timeout={notification.timeout} crossClose={notification.crossClose ? notification.crossClose : undefined} srcImage={notification.srcImage} altImage={notification.altImage} key={notification.id}/>
      {/each}
      {/if}
 </div>

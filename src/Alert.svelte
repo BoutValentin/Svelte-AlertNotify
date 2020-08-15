@@ -21,9 +21,10 @@
     onMount(()=>{
           window.setTimeout(selfDestroy,timeout)
           
-     })  
+     }) 
      const positionMinusPlus = positionBottom ? "15" : "-15"
      const typeshow = type.charAt(0).toUpperCase() + type.slice(1)
+     let isMousePressed = false;
      function createStylingString(){
           let resString = "";
           if(styleObject.border){
@@ -49,21 +50,41 @@
           
           return resString
      }
+     let pointercoordonnes = {x: undefined, y:undefined}
+     let referencesDivRoot = null
+     let pixelDerived= 0
+     let opacity = 1
+     let classAdd = `div-alert-uniq ${type==="alert"||type==="warning" ? "wiggle-animation" : null}`
+     function handleMoving(event){
+          event.stopPropagation();
+          event.preventDefault();
+          if(isMousePressed){
+               pixelDerived += event.clientX - pointercoordonnes.x
+               pointercoordonnes.x = event.clientX
+               if(Math.abs(pixelDerived)>50){
+                    opacity -= (Math.abs(pixelDerived)-50)/1000
+                    if(opacity<0.1 || Math.abs(pixelDerived) > window.innerHeight/3  ){
+                         selfDestroy()
+                    }
+               }
+          }
+          
+     }
      function selfDestroy(){
           alerts.update(alerts => {return {key:alerts.key, array: alerts.array.filter( alert => alert.id!==key)}})
      }
 </script>
 <style>
      .div-alert-uniq {
+          user-select: none;
           width: 100%;
           height: auto;
-          margin: 15px 0;
-          transition: cubic-bezier(.14,.96,.83,.67);
-          transition-duration: 100ms;
+          margin: min(15px,4vmin) 0;
           display: flex;
           flex-direction: column;
           overflow: hidden;
-
+          transform: translateX(var(--xTranslate));
+          opacity: var(--useOpacity);
      }
      :global(.wiggle-animation) {
           animation-name: wiggle;
@@ -71,7 +92,8 @@
           animation-direction:normal;
           animation-duration: 0.7s;
           animation-timing-function:linear;
-          animation-fill-mode:forwards;
+          transform: translateX(var(--xTranslate));
+          opacity: var(--useOpacity);
      }
      :global(.div-timer){
           height: 3px;
@@ -111,8 +133,8 @@
      }
      p{
           text-align: center;
-          margin: 10px auto;
-          padding: 10px;
+          margin: min(15px,2vmin) auto;
+          padding: min(5px,2vmin);
           width: auto;
           word-break: break-all;
      }
@@ -127,7 +149,7 @@
      }
 </style>
 
-<div class={`div-alert-uniq ${type==="alert"||type==="warning" ? "wiggle-animation" : null}`} in:fly={{y: positionMinusPlus, duration: 350}} out:fade style={createStylingString()} >
+<div bind:this="{referencesDivRoot}" class={` ${classAdd}`} in:fly={{y: positionMinusPlus, duration: 350}} out:fade style={createStylingString()+`--xTranslate:${pixelDerived}px;--useOpacity:${opacity};`} on:mousedown="{e=>{isMousePressed=true;pointercoordonnes.x= e.clientX;pointercoordonnes.y=e.clientY;pixelDerived=0;opacity=1;classAdd = `div-alert-uniq `}}" on:mouseup="{e=>{isMousePressed=false;pixelDerived=0;opacity=1;classAdd=`div-alert-uniq wiggle-animation`}}" on:mousemove="{handleMoving}">
      <p>
           {#if type }
                <span class="{type}-span">{typeshow} :</span>
