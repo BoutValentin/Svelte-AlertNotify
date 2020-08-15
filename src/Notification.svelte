@@ -4,14 +4,21 @@
      import {defaultCross, roundCross} from "./AppIcon.js"
      import { onMount } from "svelte";
      import SVGIcon from "./SVGIcon.svelte"
+     import { beforeUpdate, tick } from 'svelte';
+
+	beforeUpdate(async () => {
+		console.log('the component is about to update' + crossClose);
+		await tick();
+		console.log('the component just updated' + crossClose);
+	});
      export let srcImage = '';
      export let altImage = '';
      export let message = "a message in notifications"
      export let type = '';
      export let timeout = 3000;
-     export let key
-     export let crossClose = "default"
-     export let onBotton = false
+     export let key;
+     export let crossClose = "default";
+     export let onBotton = false;
      export let styleObject = {
           border: "1px solid rgba(0, 0, 0, 0.2);",
           backgroundColor: "white;",
@@ -28,9 +35,13 @@
      const typeshow = type.charAt(0).toUpperCase() + type.slice(1)
      const positionMinusPlus = onBotton ? "15" : "-15"
      onMount(()=>{
-         if(key%2) window.setTimeout(selfDestroy,timeout)
+         window.setTimeout(selfDestroy,timeout)
      })  
-     $: console.log(crossClose + key)
+     $:{
+          console.log(crossClose)
+          if( crossClose===undefined ) crossClose = "default"
+          console.log(crossClose)
+     }
      function createStylingString(){
           let resString = "";
           if(styleObject.border){
@@ -128,7 +139,7 @@
           {#if crossClose!=="none"}
           <div on:click={selfDestroy} on:mouseleave={()=>showCrossHover=false} on:mouseover={()=>{showCrossHover=true;console.log("im in")}} class="{crossClose}-cross" style={`background-color: ${showCrossHover ? "rgba(129, 129, 129, 0.2)":"white"};`}>
                {#if showCrossHover}
-                    <SVGIcon  d={crossClose==="round" ? roundCross : defaultCross} color={'black'} fill={"none"} />
+                    <SVGIcon  d={crossClose==="round" ? roundCross : defaultCross} color={'black'} />
                {/if}
           </div>
           {/if}

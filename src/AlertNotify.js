@@ -89,7 +89,14 @@ export function sendNotificationWithStyle(
       key: ++allNotifications.key,
       array: [
         ...allNotifications.array,
-        { id: allNotifications.key, message, type, styleObject, timeout },
+        {
+          id: allNotifications.key,
+          message,
+          type,
+          styleObject,
+          timeout,
+          crossClose: "",
+        },
       ],
     };
   });
