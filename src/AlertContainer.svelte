@@ -2,10 +2,10 @@
      import Alert from "./Alert.svelte"
      import { sendAlertWithStyle} from "./AlertNotify.js"
      import { alerts } from "./store.js";
-import { onDestroy } from "svelte";
-import AlertNotify from "./AlertNotify.svelte";
-import App from "../../Svelte-tester/svelte-tester/src/App.svelte";
-
+     import { onDestroy } from "svelte";
+     import {defaultCross, roundCross} from "./AppIcon.js"
+     import { onMount } from "svelte";
+     import SVGIcon from "./SVGIcon.svelte"
      export let positioning = "bottom"
      const defautStyleObject = {
   border: "1px solid rgba(129, 129, 129, 0.2);",
@@ -41,7 +41,6 @@ import App from "../../Svelte-tester/svelte-tester/src/App.svelte";
                break;
      }
      let array =[] ;
-     $: console.log(array)
      const unsubscribed = alerts.subscribe(allAlerts=>array = allAlerts.array)
      let count = 0;
      function handleClick(event){
@@ -64,7 +63,7 @@ import App from "../../Svelte-tester/svelte-tester/src/App.svelte";
                     type = ''
                     break;
           }
-          const timeout = Math.floor(Math.random() * Math.floor(5))*1000;
+          const timeout =Math.floor((Math.random() * Math.floor(5)) + 1)*1000;
           sendAlertWithStyle("Message numero "+count, type,defautStyleObject,timeout)
           ++count;
      }
@@ -85,14 +84,15 @@ import App from "../../Svelte-tester/svelte-tester/src/App.svelte";
 <button on:click={handleClick}>
      Add an Alert
 </button>
+
 <div class="div-alert-container" style={styledPositionString}>
 {#if positioning==="bottom" || positioning==="bottomRight" ||positioning==="bottomLeft" }
 {#each array as alert (alert.id) }
-     <Alert message={alert.message} type={alert.type} positionBottom={true} timeout={alert.timeout} key={alert.id}/>
+     <Alert message={alert.message} type={alert.type} positionBottom={true} timeout={alert.timeout} key={alert.id} sourceSound={alert.sourceSound}/>
 {/each}
 {:else}
 {#each [...array].reverse() as alert (alert.id) }
-     <Alert message={alert.message} type={alert.type} positionBottom={false} timeout={alert.timeout} key={alert.id}/>
+     <Alert message={alert.message} type={alert.type} positionBottom={false} timeout={alert.timeout} key={alert.id} sourceSound={alert.sourceSound}/>
 {/each}
 {/if}
 </div>
