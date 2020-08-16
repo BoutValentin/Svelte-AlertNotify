@@ -29,7 +29,8 @@ See a demo of this components here : (avaible soon)
 ### Installation
 
 ### Utilisation
-
+## Alert
+## Notification
 ### Todos
 
 What I planned for V2 :

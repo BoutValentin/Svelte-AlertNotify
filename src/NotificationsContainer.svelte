@@ -28,6 +28,24 @@
      let array =[] ;
      const unsubscribed = notifications.subscribe(allNotifications=>array = allNotifications.array)
      onDestroy(unsubscribed)
+     /* 
+     export let message = "a message in notifications"
+     export let type = '';
+     export let timeout = 3000;
+     export let crossClose = "default";
+     export let styleObject = {
+          border: "1px solid rgba(0, 0, 0, 0.2);",
+          backgroundColor: "white;",
+          borderRadius: "10px;",
+          boxShadow: "-3px -4px 15px 4px rgba(189,189,189,0.3);"
+     }
+     export let srcImage = '';
+     export let altImage = '';
+     export let svgPath = '';
+     export let svgColor = '';
+     export let showIconSvg = true;
+     export let bigMessage = ''
+     export let bigMessageIsHtml = false;*/
 </script>
 <style>
 
@@ -44,11 +62,11 @@
 <div class="div-notification-container" style={styledPositionString}>
      {#if positioning==="bottom" || positioning==="bottomRight" ||positioning==="bottomLeft" }
      {#each array as notification (notification.id) }
-          <Notification showIconSvg={notification.showIconSvg} message={notification.message} bigMessage={"ehllo wolt"} type={notification.type} onBotton={true} timeout={notification.timeout} crossClose={notification.crossClose ? notification.crossClose : undefined} srcImage={notification.srcImage} altImage={notification.altImage} key={notification.id}/>
+          <Notification message={notification.message} type={notification.type} timeout={notification.timeout} crossClose={notification.crossClose} styleObject={notification.styleObject} srcImage={notification.srcImage} altImage={notification.altImage} svgPath={notification.svgPath} svgColor={notification.svgColor} showIconSvg={notification.showIconSvg} bigMessage={notification.bigMessage} bigMessageIsHtml={notification.bigMessageIsHtml} onBotton={true} key={notification.id}/>
      {/each}
      {:else}
      {#each [...array].reverse() as notification (notification.id) }
-          <Notification showIconSvg={notification.showIconSvg} bigMessage={"salut a tous "} message={notification.message} type={notification.type} onBotton={false} timeout={notification.timeout} crossClose={notification.crossClose ? notification.crossClose : undefined} srcImage={notification.srcImage} altImage={notification.altImage} key={notification.id}/>
+          <Notification message={notification.message} type={notification.type} timeout={notification.timeout} crossClose={notification.crossClose} styleObject={notification.styleObject} srcImage={notification.srcImage} altImage={notification.altImage} svgPath={notification.svgPath} svgColor={notification.svgColor} showIconSvg={notification.showIconSvg} bigMessage={notification.bigMessage} bigMessageIsHtml={notification.bigMessageIsHtml} onBotton={true} key={notification.id}/>
      {/each}
      {/if}
 </div>

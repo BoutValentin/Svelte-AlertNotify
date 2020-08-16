@@ -61,11 +61,11 @@
 <div class="div-alert-container" style={styledPositionString}>
 {#if positioning==="bottom" || positioning==="bottomRight" ||positioning==="bottomLeft" }
 {#each array as alert (alert.id) }
-     <Alert message={alert.message} type={alert.type} positionBottom={true} timeout={alert.timeout} key={alert.id} />
+     <Alert message={alert.message} type={alert.type} positionBottom={true} timeout={alert.timeout} key={alert.id} showProgressBar={alert.showProgressBar} colorProgressBar={alert.colorProgressBar} styleObject={alert.styleObject}/>
 {/each}
 {:else}
 {#each [...array].reverse() as alert (alert.id) }
-     <Alert message={alert.message} type={alert.type} positionBottom={false} timeout={alert.timeout} key={alert.id} />
+     <Alert message={alert.message} type={alert.type} positionBottom={false} timeout={alert.timeout} key={alert.id} showProgressBar={alert.showProgressBar} colorProgressBar={alert.colorProgressBar} styleObject={alert.styleObject}/>
 {/each}
 {/if}
 </div>
