@@ -4,10 +4,10 @@ import resolve from "rollup-plugin-node-resolve";
 const pkg = require("./package.json");
 
 export default {
-  input: "src/Name.svelte",
+  input: "src/AlertNotify.svelte",
   output: [
     { file: pkg.module, format: "en" },
-    { file: pkg.main, format: "umd", name: "Name" },
+    { file: pkg.main, format: "umd", name: "AlertNotify" },
   ],
   plugins: [svelte(), resolve()],
 };

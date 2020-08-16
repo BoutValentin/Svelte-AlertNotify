@@ -1,3 +1,3 @@
 import AlertNotify from "./AlertNotify.svelte";
-
-export default AlertNotify;
+import * as senderAlerterNotifier from "./AlertNotify.js";
+export { AlertNotify, senderAlerterNotifier };

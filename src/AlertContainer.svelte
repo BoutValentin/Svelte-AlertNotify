@@ -42,31 +42,6 @@
      }
      let array =[] ;
      const unsubscribed = alerts.subscribe(allAlerts=>array = allAlerts.array)
-     let count = 0;
-     function handleClick(event){
-          const rnd = Math.floor(Math.random() * Math.floor(5))
-          let type ;
-          switch (rnd) {
-               case 0:
-                    type = "info"
-                    break;
-               case 1:
-                    type = "success"
-                    break;
-               case 2:
-                    type = "warning"
-                    break;
-               case 3:
-                    type = "alert"
-                    break;
-               default:
-                    type = ''
-                    break;
-          }
-          const timeout =Math.floor((Math.random() * Math.floor(5)) + 1)*1000;
-          sendAlertWithStyle("Message numero "+count, type,defautStyleObject,timeout)
-          ++count;
-     }
      
      onDestroy(unsubscribed)
 </script>
@@ -81,9 +56,7 @@
 }
 
 </style>
-<button on:click={handleClick}>
-     Add an Alert
-</button>
+
 
 <div class="div-alert-container" style={styledPositionString}>
 {#if positioning==="bottom" || positioning==="bottomRight" ||positioning==="bottomLeft" }

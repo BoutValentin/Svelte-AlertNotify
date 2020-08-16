@@ -18,7 +18,6 @@ export function sendAlertWithStyle(
   timeout = 3000
 ) {
   alerts.update((allAlerts) => {
-    console.log(allAlerts);
     return {
       key: ++allAlerts.key,
       array: [
@@ -219,7 +218,7 @@ export function NotificationParameterObject(
   this.styleObject = styleObject;
   this.srcImage = srcImage;
   if (srcImage && !altImage) {
-    console.log(
+    console.info(
       "No alternative attribute passed. Alt set for alternative-image"
     );
     this.altImage = "alternative-image";

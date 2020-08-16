@@ -24,7 +24,6 @@
      }) 
      const positionMinusPlus = positionBottom ? "15" : "-15"
      const typeshow = type.charAt(0).toUpperCase() + type.slice(1)
-     let isMousePressed = false;
      function createStylingString(){
           let resString = "";
           if(styleObject.border){
@@ -50,6 +49,7 @@
           
           return resString
      }
+     let isMousePressed = false;
      let pointercoordonnes = {x: undefined, y:undefined}
      let referencesDivRoot = null
      let pixelDerived= 0
