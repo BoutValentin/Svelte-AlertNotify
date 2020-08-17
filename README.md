@@ -33,7 +33,7 @@ npm i svelte-alertnotify
 Importation in your svelte project
 ```html
 <script>
-    	import {AlertNotify, senderAlerterNotifier}  from "@boutvalentin/Svelte-AlertNotify"
+    	import {AlertNotify, senderAlerterNotifier}  from "svelte-alertnotify"
     	
     	function addAlert(event){
     	    senderAlerterNotifier.sendAlertWithoutStyle("A message", "success", 4000)
