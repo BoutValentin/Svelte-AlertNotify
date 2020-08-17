@@ -95,9 +95,23 @@
           }
           
      }
+     function handlePressedDown(event){
+          isMousePressed=true;
+          pointercoordonnes.x = event.clientX;
+          pointercoordonnes.y = event.clientY;
+          pixelDerived=0;
+          opacity=1;
+          classAdd = `div-notification-uniq-root`
+     }
+     function handlePressedUp(event){
+          isMousePressed=false;
+          pixelDerived=0;
+          opacity=1;
+          classAdd=`div-notification-uniq-root wiggle-animation`
+     }
      function is_touch_enabled() { 
             return ( 'ontouchstart' in window ) 
-        } 
+     } 
      function selfDestroy(){
           if(showBigMessage){
                window.setTimeout(selfDestroy,timeout)
@@ -213,29 +227,29 @@
 
 </style>
 
-<div bind:this={referencesDivRoot} class={`${classAdd}`} in:fly={{y: positionMinusPlus, duration: 350}} out:fade style={createStylingString()+`--xTranslate:${pixelDerived}px;--useOpacity:${opacity};--heightBefore:${heightBefore}px;--heightAfter:${heightAfter}px;--animDir:${!showBigMessage?"reverse":"normal"};`} on:mousedown|stopPropagation="{e=>{isMousePressed=true;pointercoordonnes.x= e.clientX;pointercoordonnes.y=e.clientY;pixelDerived=0;opacity=1;classAdd = `div-notification-uniq-root`}}" on:mouseup|stopPropagation="{e=>{isMousePressed=false;pixelDerived=0;opacity=1;classAdd=`div-notification-uniq-root wiggle-animation`}}" on:mousemove="{handleMoving}">
+<div bind:this={referencesDivRoot} class={`${classAdd}`} in:fly={{y: positionMinusPlus, duration: 350}} out:fade style={createStylingString()+`--xTranslate:${pixelDerived}px;--useOpacity:${opacity};--heightBefore:${heightBefore}px;--heightAfter:${heightAfter}px;--animDir:${!showBigMessage?"reverse":"normal"};`} on:mousedown|stopPropagation="{handlePressedDown}" on:mouseup|stopPropagation="{handlePressedUp}" on:mousemove="{handleMoving}">
      <div transition:fade={{duration: 0.5}} class="div-notification-uniq" style={`--heightVar: ${showBigMessage?"25px":"auto"};--fontSize: ${showBigMessage?"12px":"auto"};`}>
           {#if srcImage}
           <img src={srcImage} alt={altImage} style={`--heightValue: ${showBigMessage?"70%":"55px"}; --widthValue: ${showBigMessage?"auto":"auto"}; --marginValue: ${ showBigMessage?"auto 5px":"5px 2px 5px 5px "} ;`}/>
-          {:else if type==="" && showIconSvg}
-          <div class={"contain-svg"}>
-          <SVGIcon  d={unamed} color={'#3C4859'} height={showBigMessage?"30%":"50%"} width={showBigMessage?"30%":"50%"}/>
-          </div>
-          {:else if type==="success"&& showIconSvg}
-          <div class={"contain-svg"}>
-               <SVGIcon  d={success} color={'#8ac926'} height={showBigMessage?"30%":"50%"} width={showBigMessage?"30%":"50%"} />
-          </div>
-          {:else if type==="info"&& showIconSvg}
-               <div class={"contain-svg"}>
-                    <SVGIcon  d={info} color={'#f77f00'} height={showBigMessage?"30%":"50%"} width={showBigMessage?"30%":"50%"} />
-               </div>
-          {:else if type==="warning" || type==="alert" && showIconSvg}
-               <div class={"contain-svg"}>
-                    <SVGIcon  d={alert} color={'red'} height={showBigMessage?"30%":"50%"} width={showBigMessage?"30%":"50%"}/>
-               </div>
           {:else if svgPath}
                <div class={"contain-svg"}>
                     <SVGIcon  d={svgPath} color={svgColor} height={showBigMessage?"30%":"50%"} width={showBigMessage?"30%":"50%"}/>
+               </div>
+          {:else if type==="" && showIconSvg}
+          <div class={"contain-svg"}>
+          <SVGIcon  d={unamed} color={svgColor ? svgColor :'#3C4859'} height={showBigMessage?"30%":"50%"} width={showBigMessage?"30%":"50%"}/>
+          </div>
+          {:else if type==="success"&& showIconSvg}
+          <div class={"contain-svg"}>
+               <SVGIcon  d={success} color={svgColor? svgColor :'#8ac926'} height={showBigMessage?"30%":"50%"} width={showBigMessage?"30%":"50%"} />
+          </div>
+          {:else if type==="info"&& showIconSvg}
+               <div class={"contain-svg"}>
+                    <SVGIcon  d={info} color={svgColor? svgColor :'#f77f00'} height={showBigMessage?"30%":"50%"} width={showBigMessage?"30%":"50%"} />
+               </div>
+          {:else if type==="warning" || type==="alert" && showIconSvg}
+               <div class={"contain-svg"}>
+                    <SVGIcon  d={alert} color={svgColor? svgColor :'red'} height={showBigMessage?"30%":"50%"} width={showBigMessage?"30%":"50%"}/>
                </div>
           {/if}
           <p class={"p-title"} style={`${(!srcImage | type===''|type==="info"|type==="alert"|type==="warning"|type==="success"|svgPath) && showIconSvg ? "--leftMargin: 2px; --leftPadding:2px;" : "--leftMargin: auto;--leftPadding:15px;"}--paddingValue:${showBigMessage ? "auto":"10px"};`}>

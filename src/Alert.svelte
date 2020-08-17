@@ -70,6 +70,20 @@
           }
           
      }
+     function handlePressedDown(event){
+          isMousePressed=true;
+          pointercoordonnes.x = event.clientX;
+          pointercoordonnes.y = event.clientY;
+          pixelDerived=0;
+          opacity=1;
+          classAdd = `div-alert-uniq`
+     }
+     function handlePressedUp(event){
+          isMousePressed=false;
+          pixelDerived=0;
+          opacity=1;
+          classAdd=`div-alert-uniq wiggle-animation`
+     }
      function selfDestroy(){
           alerts.update(alerts => {return {key:alerts.key, array: alerts.array.filter( alert => alert.id!==key)}})
      }
@@ -149,7 +163,7 @@
      }
 </style>
 
-<div bind:this="{referencesDivRoot}" class={` ${classAdd}`} in:fly={{y: positionMinusPlus, duration: 350}} out:fade style={createStylingString()+`--xTranslate:${pixelDerived}px;--useOpacity:${opacity};`} on:mousedown="{e=>{isMousePressed=true;pointercoordonnes.x= e.clientX;pointercoordonnes.y=e.clientY;pixelDerived=0;opacity=1;classAdd = `div-alert-uniq `}}" on:mouseup="{e=>{isMousePressed=false;pixelDerived=0;opacity=1;classAdd=`div-alert-uniq wiggle-animation`}}" on:mousemove="{handleMoving}">
+<div bind:this="{referencesDivRoot}" class={` ${classAdd}`} in:fly={{y: positionMinusPlus, duration: 350}} out:fade style={createStylingString()+`--xTranslate:${pixelDerived}px;--useOpacity:${opacity};`} on:mousedown="{handlePressedDown}" on:mouseup="{handlePressedUp}" on:mousemove="{handleMoving}">
      <p>
           {#if type }
                <span class="{type}-span">{typeshow} :</span>
