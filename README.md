@@ -11,7 +11,7 @@ Svelte-AlertNotify is a svelte component made to display cool alerts or notifica
 
 # New Features!
 
-  - You can now 'kill' the notifications or alerts with a slide on left or right
+  - You can now 'kill' the notifications or alerts with a swipe on left or right
   - Big notifications now have an animation between rendering for a smooth transition
   - You can now add your own SVG icon to the notifications instead of an images
 
@@ -53,7 +53,7 @@ Importation in your svelte project
 	</div>
 ```
 # Utilisation
-## Props to the AlertNotify components
+## Props to the AlertNotify component
 
 The AlertNotify component take two props :
 
@@ -179,7 +179,7 @@ One more detail : You can kill the alert by swipping to the right or to the left
 ## Notification
 
 The most complete way to create a notification and fully customize it is to create an AlertParameterObject object using the defined constructor, and then use this object as a parameter of the sendNotificationByObject method.
-By using this method and object you can create what I call bigNotifications wich is a notifications with an hidden text display when you click on the "more arrow". This hidden text can be full html but you have to precise it by passing the boolean bigMessageIsHtml to true.
+By using this method and object you can create what I call a bigNotifications wich is a notifications with an hidden text display when you click on the "more arrow". This hidden text can be full html but you have to precise it by passing the boolean bigMessageIsHtml to true.
 You can also passed the link and alt attribute of an image or use a svg as a replacement of the default one and set the color of this svg.
 
 ***Exemple :***
@@ -261,7 +261,7 @@ sendNotificationSuccessWithoutStyle(message, [timeout = 3000])
 
 ```
 
-One more detail : the closing mark is on the right and appear when youre mouse is over the right. You can also kill the notification by swipping to the right or left
+One more detail : the closing mark is on the right and appear when youre mouse is over it. You can also kill the notification by swipping to the right or left.
 # Todos
 
 What I planned for V2 :
