@@ -28,7 +28,7 @@ See a demo of this components here : (avaible soon)
 
 # Installation
 ```sh
-npm i -D @boutvalentin/Svelte-AlertNotify
+npm i svelte-alertnotify
 ```
 Importation in your svelte project
 ```html

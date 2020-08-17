@@ -1,6 +1,6 @@
 {
   "name": "svelte-alertnotify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A svelte package who provied method to display alert and notifications",
   "main": "dist/index.js",
   "scripts": {
