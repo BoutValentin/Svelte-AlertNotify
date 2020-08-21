@@ -7,6 +7,8 @@
      import { onMount } from "svelte";
      import SVGIcon from "./SVGIcon.svelte"
      export let positioning = "bottom"
+     export let showFastClean = false
+
      const defautStyleObject = {
   border: "1px solid rgba(129, 129, 129, 0.2);",
   backgroundColor: "white;",

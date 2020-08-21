@@ -19,6 +19,7 @@
      export let onBotton = false;
      export let bigMessage = ''
      export let bigMessageIsHtml = false;
+     export let isLastChild = false;
      export let styleObject = {
           border: "1px solid rgba(0, 0, 0, 0.2);",
           backgroundColor: "white;",
@@ -38,7 +39,7 @@
      let heightBefore = 0 ;
      let heightAfter = 0;
      onMount(()=>{
-        window.setTimeout(selfDestroy,timeout)
+         window.setTimeout(selfDestroy,timeout)
          heightBefore = referencesDivRoot.clientHeight;
      }) 
      $:{
@@ -46,10 +47,11 @@
           if(showIconSvg===undefined) showIconSvg = true
      }
     async function handleMore(event){
+         
           showBigMessage = !showBigMessage
           await tick()
           if(showBigMessage)heightAfter=referencesDivRoot.clientHeight
-          classAdd=`div-notification-uniq-root smooth-bigger`
+          objectHandle.classAdd=`div-notification-uniq-root smooth-bigger`
      }
      function createStylingString(){
           let resString = "";
@@ -75,7 +77,6 @@
           }
           return resString
      }
-     console.log("rebuil")
      let objectHandle = {
           isMousePressed: false,
           pointercoordonnes: {x: undefined, y:undefined},
@@ -103,6 +104,7 @@
           display:flex;
           overflow: hidden;
           margin: 15px 0;
+          margin-bottom: var(--marginBottom);
           width: 100%;
           height: auto;
           flex-direction: column;
@@ -204,7 +206,7 @@
 
 </style>
 
-<div bind:this={referencesDivRoot} class={`${objectHandle.classAdd}`} in:fly={{y: positionMinusPlus, duration: 350}} out:fade style={createStylingString()+`--xTranslate:${objectHandle.pixelDerived}px;--useOpacity:${objectHandle.opacity};--heightBefore:${heightBefore}px;--heightAfter:${heightAfter}px;--animDir:${!showBigMessage?"reverse":"normal"};`} on:mousedown|stopPropagation="{(event)=>{handlePressedDown(event,objectHandle,`div-notification-uniq-root`);objectHandle = objectHandle}}" on:mouseup|stopPropagation="{(event)=>{handlePressedUp(event,objectHandle,`div-notification-uniq-root wiggle-animation`);objectHandle = objectHandle}}" on:mousemove="{(event)=>{handleMoving(event,objectHandle,selfDestroy);objectHandle = objectHandle}}">
+<div bind:this={referencesDivRoot} class={`${objectHandle.classAdd}`} in:fly={{y: positionMinusPlus, duration: 350}} out:fade style={createStylingString()+`--xTranslate:${objectHandle.pixelDerived}px;--useOpacity:${objectHandle.opacity};--heightBefore:${heightBefore}px;--heightAfter:${heightAfter}px;--animDir:${!showBigMessage?"reverse":"normal"};--marginBottom:${isLastChild?"2px":"15px"};`} on:mousedown|stopPropagation="{(event)=>{handlePressedDown(event,objectHandle,`div-notification-uniq-root`);objectHandle = objectHandle}}" on:mouseup|stopPropagation="{(event)=>{handlePressedUp(event,objectHandle,`div-notification-uniq-root wiggle-animation`);objectHandle = objectHandle}}" on:mousemove="{(event)=>{handleMoving(event,objectHandle,selfDestroy);objectHandle = objectHandle}}">
      <div transition:fade={{duration: 0.5}} class="div-notification-uniq" style={`--heightVar: ${showBigMessage?"25px":"auto"};--fontSize: ${showBigMessage?"12px":"auto"};`}>
           {#if srcImage}
           <img src={srcImage} alt={altImage} style={`--heightValue: ${showBigMessage?"70%":"55px"}; --widthValue: ${showBigMessage?"auto":"auto"}; --marginValue: ${ showBigMessage?"auto 5px":"5px 2px 5px 5px "} ;`}/>
@@ -236,7 +238,7 @@
               {message} 
           </p>
           {#if bigMessage}
-               <div class={"contain-svg"} on:click="{handleMore}">
+               <div class={"contain-svg"} on:click|stopPropagation="{handleMore}">
                     <SVGIcon d={downArrow} shouldRotate={true} rotationFrom={!showBigMessage?"180deg":"0deg"} rotationTo={!showBigMessage?"0deg":"180deg"} color={"black"} height={showBigMessage?"30%":"40%"} width={showBigMessage?"30%":"40%"} />
                </div>
           {/if}

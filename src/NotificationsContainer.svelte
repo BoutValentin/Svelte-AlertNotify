@@ -2,8 +2,11 @@
      import Notification from "./Notification.svelte"
      import { notifications } from "./store.js";
      import { onDestroy } from "svelte";
+import SvgIcon from "./SVGIcon.svelte";
+import { clearAll } from "./AppIcon";
 
      export let positioning = "topRight"
+     export let showFastClean = true
      if(positioning &&positioning!=="topRight"&&positioning!=="topLeft"&&positioning!=="bottomRight"&&positioning!=="bottomLeft"){
           console.error("Invalid property Named : You can use topRight, topLeft, bottomRight, bottomLeft and you use " + positioning )
           positioning = "topRight"
@@ -27,25 +30,20 @@
      }
      let array =[] ;
      const unsubscribed = notifications.subscribe(allNotifications=>array = allNotifications.array)
-     onDestroy(unsubscribed)
-     /* 
-     export let message = "a message in notifications"
-     export let type = '';
-     export let timeout = 3000;
-     export let crossClose = "default";
-     export let styleObject = {
-          border: "1px solid rgba(0, 0, 0, 0.2);",
-          backgroundColor: "white;",
-          borderRadius: "10px;",
-          boxShadow: "-3px -4px 15px 4px rgba(189,189,189,0.3);"
+     let interval;
+     function handleClear(event){
+          if(positioning==="bottom" || positioning==="bottomRight" ||positioning==="bottomLeft"){
+          notifications.update(notifications => {return {key:notifications.key, array: notifications.array.slice(0, -1)}})
+          if(array.length>=1) interval = setInterval(()=>notifications.update(notifications => {return {key:notifications.key, array: notifications.array.slice(0, -1)}}),125);
+          }else{
+               notifications.update(notifications => {return {key:notifications.key, array: notifications.array.slice(1)}})
+               if(array.length>=1) interval = setInterval(()=>notifications.update(notifications => {return {key:notifications.key, array: notifications.array.slice(1)}}),125);
+           
+          }
      }
-     export let srcImage = '';
-     export let altImage = '';
-     export let svgPath = '';
-     export let svgColor = '';
-     export let showIconSvg = true;
-     export let bigMessage = ''
-     export let bigMessageIsHtml = false;*/
+     $:if (array.length===0) clearInterval(interval)
+     onDestroy(()=>{unsubscribed();clearInterval(interval)})
+
 </script>
 <style>
 
@@ -57,16 +55,39 @@
      transition-duration: 500ms;
      z-index: 100;
 }
+.contain-clear-div{
+     max-height: min(5vmin, 55px);
+     width: auto;
+     align-self: flex-end;
+     display: flex ;
+     flex-direction: row;
+justify-content: space-between;}
+.subcontain-clear-div{
+     margin: var(--margin);
+     height: min(5vmin, 35px);
+     width: min(5vmin, 35px);
+     align-self: flex-end;
+     transform: rotate(var(--rotate));
+}
+
+
 </style>
 
 <div class="div-notification-container" style={styledPositionString}>
      {#if positioning==="bottom" || positioning==="bottomRight" ||positioning==="bottomLeft" }
-     {#each array as notification (notification.id) }
-          <Notification message={notification.message} type={notification.type} timeout={notification.timeout} crossClose={notification.crossClose} styleObject={notification.styleObject} srcImage={notification.srcImage} altImage={notification.altImage} svgPath={notification.svgPath} svgColor={notification.svgColor} showIconSvg={notification.showIconSvg} bigMessage={notification.bigMessage} bigMessageIsHtml={notification.bigMessageIsHtml} onBotton={true} key={notification.id}/>
+     {#each array as notification,i (notification.id) }
+          <Notification message={notification.message} type={notification.type} timeout={notification.timeout} crossClose={notification.crossClose} styleObject={notification.styleObject} srcImage={notification.srcImage} altImage={notification.altImage} svgPath={notification.svgPath} svgColor={notification.svgColor} showIconSvg={notification.showIconSvg} bigMessage={notification.bigMessage} bigMessageIsHtml={notification.bigMessageIsHtml} onBotton={true} key={notification.id} isLastChild={i+1===array.length}/>
      {/each}
      {:else}
-     {#each [...array].reverse() as notification (notification.id) }
-          <Notification message={notification.message} type={notification.type} timeout={notification.timeout} crossClose={notification.crossClose} styleObject={notification.styleObject} srcImage={notification.srcImage} altImage={notification.altImage} svgPath={notification.svgPath} svgColor={notification.svgColor} showIconSvg={notification.showIconSvg} bigMessage={notification.bigMessage} bigMessageIsHtml={notification.bigMessageIsHtml} onBotton={true} key={notification.id}/>
+     {#each [...array].reverse() as notification,i (notification.id) }
+          <Notification message={notification.message} type={notification.type} timeout={notification.timeout} crossClose={notification.crossClose} styleObject={notification.styleObject} srcImage={notification.srcImage} altImage={notification.altImage} svgPath={notification.svgPath} svgColor={notification.svgColor} showIconSvg={notification.showIconSvg} bigMessage={notification.bigMessage} bigMessageIsHtml={notification.bigMessageIsHtml} onBotton={true} key={notification.id} isLastChild={i+1===array.length}/>
      {/each}
+     {/if}
+     {#if array.length>1 && showFastClean}
+     <div class="contain-clear-div" on:click="{handleClear}" >
+          <div class="subcontain-clear-div" style={`${positioning==="bottom" || positioning==="bottomRight" ||positioning==="topRight" || positioning==="top" ?" --margin: 0 5px 0 auto;--rotate:0deg;":"--margin:0 auto 0 5px;--rotate:180deg;"}`}>
+               <SvgIcon d={clearAll} color={"black"} height={"min(5vmin, 35px)"} width={"min(5vmin, 35px)"}/>
+          </div>
+     </div>
      {/if}
 </div>

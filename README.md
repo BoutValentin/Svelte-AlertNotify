@@ -23,6 +23,8 @@ You can also:
 
 Version 1.0.2 : 
  - Reducing package size with reconfiguration of method
+Version 1.0.3 :
+ - A clear all notifications button add to the notifications container 
 # Demo
 
 See a demo of this components here : (avaible soon)
@@ -73,6 +75,10 @@ The AlertNotify component take two props :
   - **bottomLeft**
   - **bottomRight**
   - Any **other value** is set to the **default** 
+
+ **showFastCleanNotifications** : this props can take this value defining if you want to show the clear all notification:
+  - **true** 
+  - **false**
  
 ## StyleObject
 

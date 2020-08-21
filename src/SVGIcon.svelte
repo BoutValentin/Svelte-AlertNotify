@@ -18,7 +18,6 @@ import { onMount, tick } from "svelte";
      )
       function handleClick(event){
           if(shouldRotate){
-               console.log(references.firstChild)
                if(!asRotate){
                     references.firstChild.classList.remove("animation-class-reverse")
                     references.firstChild.classList.add("animation-class")
