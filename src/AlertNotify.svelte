@@ -4,5 +4,6 @@
      export let positioningAlerting = "bottom"
      export let positioningNotifications = "topRight"
 </script>
+<p>coucou en</p>
 <AlertContainer positioning={positioningAlerting}/>
 <NotificationsContainer positioning={positioningNotifications} />

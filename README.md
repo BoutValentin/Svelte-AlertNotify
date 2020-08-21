@@ -21,7 +21,8 @@ You can also:
   - Deactivated the progress timebar on alerts
   - Choose the style of the crossclose to a round style or default style
 
-
+Version 1.0.2 : 
+ - Reducing package size with reconfiguration of method
 # Demo
 
 See a demo of this components here : (avaible soon)

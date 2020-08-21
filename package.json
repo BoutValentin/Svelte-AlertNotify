@@ -1,6 +1,6 @@
 {
   "name": "svelte-alertnotify",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A svelte package who provied method to display alert and notifications",
   "main": "dist/index.js",
   "scripts": {
@@ -26,9 +26,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/BoutValentin/Svelte-AlertNotify"
-},
-"homepage": "",
-"bugs": {
+  },
+  "homepage": "",
+  "bugs": {
     "url": "https://github.com/BoutValentin/Svelte-AlertNotify/issues"
-}
+  }
 }

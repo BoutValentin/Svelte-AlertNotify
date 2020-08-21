@@ -1,10 +1,11 @@
 <script>
      import {fade,fly} from "svelte/transition"
      import { notifications } from "./store.js";
-     import {defaultCross, roundCross, success, unamed, info, alert, downArrow, upArrow} from "./AppIcon.js"
-     import { onMount, createEventDispatcher } from "svelte";
+     import {defaultCross, roundCross, success, unamed, info, alert, downArrow} from "./AppIcon.js"
+     import { onMount } from "svelte";
      import SVGIcon from "./SVGIcon.svelte"
-     import { beforeUpdate, tick } from 'svelte';
+     import { tick } from 'svelte';
+     import {handleMoving,handlePressedDown,handlePressedUp} from "./handleAction.js"
      export let srcImage = '';
      export let altImage = '';
      export let svgPath = '';
@@ -74,41 +75,17 @@
           }
           return resString
      }
-     let isMousePressed = false;
-     let pointercoordonnes = {x: undefined, y:undefined}
+     console.log("rebuil")
+     let objectHandle = {
+          isMousePressed: false,
+          pointercoordonnes: {x: undefined, y:undefined},
+     pixelDerived: 0,
+     opacity: 1,
+     classAdd:  `div-notification-uniq-root ${type==="alert"||type==="warning" ? "wiggle-animation" : null}`
+
+     }
      let referencesDivRoot = null
-     let pixelDerived= 0
-     let opacity = 1
-     let classAdd = `div-notification-uniq-root ${type==="alert"||type==="warning" ? "wiggle-animation" : null}`
-     function handleMoving(event){
-          event.stopPropagation();
-          event.preventDefault();
-          if(isMousePressed){
-               pixelDerived += event.clientX - pointercoordonnes.x
-               pointercoordonnes.x = event.clientX
-               if(Math.abs(pixelDerived)>50){
-                    opacity -= (Math.abs(pixelDerived)-50)/1000
-                    if(opacity<0.1 || Math.abs(pixelDerived) > window.innerHeight/3  ){
-                         selfDestroy()
-                    }
-               }
-          }
-          
-     }
-     function handlePressedDown(event){
-          isMousePressed=true;
-          pointercoordonnes.x = event.clientX;
-          pointercoordonnes.y = event.clientY;
-          pixelDerived=0;
-          opacity=1;
-          classAdd = `div-notification-uniq-root`
-     }
-     function handlePressedUp(event){
-          isMousePressed=false;
-          pixelDerived=0;
-          opacity=1;
-          classAdd=`div-notification-uniq-root wiggle-animation`
-     }
+     
      function is_touch_enabled() { 
             return ( 'ontouchstart' in window ) 
      } 
@@ -227,7 +204,7 @@
 
 </style>
 
-<div bind:this={referencesDivRoot} class={`${classAdd}`} in:fly={{y: positionMinusPlus, duration: 350}} out:fade style={createStylingString()+`--xTranslate:${pixelDerived}px;--useOpacity:${opacity};--heightBefore:${heightBefore}px;--heightAfter:${heightAfter}px;--animDir:${!showBigMessage?"reverse":"normal"};`} on:mousedown|stopPropagation="{handlePressedDown}" on:mouseup|stopPropagation="{handlePressedUp}" on:mousemove="{handleMoving}">
+<div bind:this={referencesDivRoot} class={`${objectHandle.classAdd}`} in:fly={{y: positionMinusPlus, duration: 350}} out:fade style={createStylingString()+`--xTranslate:${objectHandle.pixelDerived}px;--useOpacity:${objectHandle.opacity};--heightBefore:${heightBefore}px;--heightAfter:${heightAfter}px;--animDir:${!showBigMessage?"reverse":"normal"};`} on:mousedown|stopPropagation="{(event)=>{handlePressedDown(event,objectHandle,`div-notification-uniq-root`);objectHandle = objectHandle}}" on:mouseup|stopPropagation="{(event)=>{handlePressedUp(event,objectHandle,`div-notification-uniq-root wiggle-animation`);objectHandle = objectHandle}}" on:mousemove="{(event)=>{handleMoving(event,objectHandle,selfDestroy);objectHandle = objectHandle}}">
      <div transition:fade={{duration: 0.5}} class="div-notification-uniq" style={`--heightVar: ${showBigMessage?"25px":"auto"};--fontSize: ${showBigMessage?"12px":"auto"};`}>
           {#if srcImage}
           <img src={srcImage} alt={altImage} style={`--heightValue: ${showBigMessage?"70%":"55px"}; --widthValue: ${showBigMessage?"auto":"auto"}; --marginValue: ${ showBigMessage?"auto 5px":"5px 2px 5px 5px "} ;`}/>

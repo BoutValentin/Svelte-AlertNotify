@@ -2,6 +2,9 @@
      import {fade,fly} from "svelte/transition"
      import { alerts } from "./store.js";
      import { onMount } from "svelte";
+
+     import {handleMoving,handlePressedDown,handlePressedUp} from "./handleAction.js"
+
      export let message = "a message in alert"
      export let type = ''
      export let timeout = 3000
@@ -49,41 +52,15 @@
           
           return resString
      }
-     let isMousePressed = false;
-     let pointercoordonnes = {x: undefined, y:undefined}
+     let objectHandle = {
+          isMousePressed: false,
+          pointercoordonnes: {x: undefined, y:undefined},
+     pixelDerived: 0,
+     opacity: 1,
+     classAdd:  `div-alert-uniq ${type==="alert"||type==="warning" ? "wiggle-animation" : null}`
+
+     }
      let referencesDivRoot = null
-     let pixelDerived= 0
-     let opacity = 1
-     let classAdd = `div-alert-uniq ${type==="alert"||type==="warning" ? "wiggle-animation" : null}`
-     function handleMoving(event){
-          event.stopPropagation();
-          event.preventDefault();
-          if(isMousePressed){
-               pixelDerived += event.clientX - pointercoordonnes.x
-               pointercoordonnes.x = event.clientX
-               if(Math.abs(pixelDerived)>50){
-                    opacity -= (Math.abs(pixelDerived)-50)/1000
-                    if(opacity<0.1 || Math.abs(pixelDerived) > window.innerHeight/3  ){
-                         selfDestroy()
-                    }
-               }
-          }
-          
-     }
-     function handlePressedDown(event){
-          isMousePressed=true;
-          pointercoordonnes.x = event.clientX;
-          pointercoordonnes.y = event.clientY;
-          pixelDerived=0;
-          opacity=1;
-          classAdd = `div-alert-uniq`
-     }
-     function handlePressedUp(event){
-          isMousePressed=false;
-          pixelDerived=0;
-          opacity=1;
-          classAdd=`div-alert-uniq wiggle-animation`
-     }
      function selfDestroy(){
           alerts.update(alerts => {return {key:alerts.key, array: alerts.array.filter( alert => alert.id!==key)}})
      }
@@ -163,7 +140,7 @@
      }
 </style>
 
-<div bind:this="{referencesDivRoot}" class={` ${classAdd}`} in:fly={{y: positionMinusPlus, duration: 350}} out:fade style={createStylingString()+`--xTranslate:${pixelDerived}px;--useOpacity:${opacity};`} on:mousedown="{handlePressedDown}" on:mouseup="{handlePressedUp}" on:mousemove="{handleMoving}">
+<div bind:this="{referencesDivRoot}" class={` ${objectHandle.classAdd}`} in:fly={{y: positionMinusPlus, duration: 350}} out:fade style={createStylingString()+`--xTranslate:${objectHandle.pixelDerived}px;--useOpacity:${objectHandle.opacity};`} on:mousedown="{e=>{handlePressedDown(e,objectHandle,`div-alert-uniq`);objectHandle=objectHandle}}" on:mouseup="{e=>{handlePressedUp(e,objectHandle,`div-alert-uniq wiggle-animation`);objectHandle=objectHandle}}" on:mousemove="{e=>{handleMoving(e,objectHandle,selfDestroy);objectHandle=objectHandle}}">
      <p>
           {#if type }
                <span class="{type}-span">{typeshow} :</span>
